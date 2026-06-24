@@ -1,0 +1,6 @@
+{
+  "name": "Metacognitive Agent Sandbox",
+  "description": "An interactive, visually rich simulation and testing environment for configuring, running, and analyzing the 7 layers of a Metacognitive AI Agent.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
