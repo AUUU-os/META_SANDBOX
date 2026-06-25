@@ -50,6 +50,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MemoryNetworkGraph } from './components/MemoryNetworkGraph';
+import { DriveSyncPanel } from './components/DriveSyncPanel';
 
 export default function App() {
   // Config States
@@ -446,6 +447,25 @@ export default function App() {
     setSelfModel(INITIAL_SELF_MODEL);
   };
 
+  const handleLoadStateFromDrive = (data: any) => {
+    if (!data) return;
+    if (data.taskPrompt !== undefined) setTaskPrompt(data.taskPrompt);
+    if (data.selectedDomain !== undefined) {
+      const match = COGNITIVE_DOMAINS.find(d => d.id === data.selectedDomain.id);
+      if (match) setSelectedDomain(match);
+    }
+    if (data.secondaryDomain !== undefined) {
+      const match = COGNITIVE_DOMAINS.find(d => d.id === data.secondaryDomain.id);
+      if (match) setSecondaryDomain(match);
+    }
+    if (data.isComparisonMode !== undefined) setIsComparisonMode(data.isComparisonMode);
+    if (data.simulationTrace !== undefined) setSimulationTrace(data.simulationTrace);
+    if (data.secondarySimulationTrace !== undefined) setSecondarySimulationTrace(data.secondarySimulationTrace);
+    if (data.selfModel !== undefined) setSelfModel(data.selfModel);
+    if (data.memories !== undefined) setMemories(data.memories);
+    if (data.confidenceThreshold !== undefined) setConfidenceThreshold(data.confidenceThreshold);
+  };
+
   // Add customized self-model trait
   const handleAddStrength = () => {
     if (newStrength.trim() && !selfModel.strengths.includes(newStrength.trim())) {
@@ -736,6 +756,23 @@ export default function App() {
 
       {/* Main Workspace Frame container */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="lg:col-span-12">
+          <DriveSyncPanel 
+            currentAppState={{
+              taskPrompt,
+              selectedDomain,
+              secondaryDomain,
+              isComparisonMode,
+              simulationTrace,
+              secondarySimulationTrace,
+              selfModel,
+              memories,
+              confidenceThreshold
+            }}
+            onLoadState={handleLoadStateFromDrive}
+          />
+        </div>
+
         {isFallbackMode && (
           <div className="lg:col-span-12 bg-amber-500/10 border border-amber-500/30 text-amber-200 px-4 py-3 rounded-xl flex items-center justify-between gap-3 text-xs shadow-md shadow-amber-950/20">
             <div className="flex items-center gap-2">
